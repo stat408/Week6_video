@@ -1,0 +1,191 @@
+---
+title: "Week 6: Video"
+output:
+  revealjs::revealjs_presentation:
+    theme: white
+    center: true
+    transition: none
+    incremental: true
+---
+
+
+```{r setup, include=FALSE}
+library(knitr)
+library(formatR)
+library(XML)
+library(dplyr)
+library(ggplot2)
+knitr::opts_chunk$set(echo = TRUE)
+knitr::knit_hooks$set(mysize = function(before, options, envir) {
+  if (before) 
+    return(options$size)
+})
+```
+
+# Data Viz Resources
+
+## Data Viz Resources
+
+- [Tufte: Visual Display of Quantitative Information](https://www.amazon.com/Visual-Display-Quantitative-Information/dp/0961392142)
+- [Cleveland: The Elements of Graphing Data](https://www.amazon.com/Elements-Graphing-Data-William-Cleveland/dp/0963488414)
+- [Yau: Visualize This](https://www.amazon.com/Visualize-This-FlowingData-Visualization-Statistics-dp-1394214863/dp/1394214863/ref=dp_ob_title_bk)
+- [Cairo: Truthful Art, The: Data, Charts, and Maps for Communication](https://www.amazon.com/gp/product/0321934075/)
+
+# Telling Stories with Data
+
+## Telling Stories with Data{.centered}
+
+![One of the best ways to explore and understand a dataset is with visualization.](images/food.png)
+
+
+# Data viz is more than numbers
+
+## Journalism{.centered}
+
+![Spending Allocation](images/foodspending.png)
+
+## Art{.centered}
+![Starry night for the color blind](images/VanGogh.png)
+
+## Entertainment{.centered}
+
+![Kobe Bryant Shot Chart](images/Kobe.png)
+
+## Compelling - Hans Rosling
+
+![Hans Rosling](images/Hans.jpg)
+
+[http://www.youtube.com/embed/jbkSRLYSojo?rel=0](http://www.youtube.com/embed/jbkSRLYSojo?rel=0)
+
+## Exercise: Hans Rosling Discussion
+
+- What did you learn from this movie?
+- How did Hans Rosling use data visualization to tell a story?
+- What principles from the visualization would you like to be able to do?
+
+
+# Data Viz: What to look for
+
+## Patterns{.centered}
+
+![Why so many births around Sept. 25?](images/births.jpg)
+
+## Relationships{.centered}
+
+![Age vs. hospital visits](images/Punching.png)
+
+## Questionable Data{.centered}
+
+![Fox News](images/Bush.png)
+
+# Design Principles
+
+## Explain Encodings{.centered}
+![what is purple?](images/emily.png)
+
+## Explain Encodings{.centered}
+![what is gray?](images/Sophia.png)
+
+## Label Axes{.centered}
+
+![Calories for menu items](images/calories.png)
+
+
+## Keep Geometry in Check{.centered}
+
+![proper scaling](images/moon.png)
+
+## Include Sources{.centered}
+
+![source your data](images/life.png)
+
+
+## Spotting Visualization Lies{.centered}
+
+![FlowingData Guide for Spotting Visualization Lies:](images/Truncated.png)
+
+# Types of Graphs
+
+
+
+## Why use Graphics
+
+- Why do you, or have you, in the past used data graphics?
+    - Exploratory Graphics
+    - Publication Graphics
+    - Presentation Graphics
+
+# Graphics in R
+
+## Exercise: Visualizing Patterns Over Time
+
+- What are we looking for with data over time?
+
+## Solution: Visualizing Patterns Over Time
+
+- What are we looking for with data over time?
+    - Trends (increasing/decreasing)
+    - Are season cycles present?
+- Identifying these patterns requires looking beyond single points
+- We are also interested in looking at more the data in more detail
+    - Are there outliers?
+    - Do any time periods look out of place?
+    - Are there spikes or dips?
+    - What causes any of these irregularities?
+
+
+## Capital BikeShare{.centered}
+
+![](images/bike1.png)
+
+## Capital BikeShare{.centered}
+
+![](images/bike2.png)
+
+## Capital Bikeshare Data
+
+```{r , mysize=TRUE, size='\\tiny'}
+library(readr)
+bike.data <- read_csv('http://www.math.montana.edu/ahoegh/teaching/stat408/datasets/Bike.csv')
+```
+
+## Capital Bikeshare Data
+
+```{r}
+library(lubridate)
+library(dplyr)
+bike.data <- bike.data %>% mutate(year = as.factor(year(datetime)), month = as.factor(month(datetime)))
+monthly.counts <- bike.data %>% group_by(month) %>% summarize(num_bikes = sum(count)) %>% arrange(month)
+monthly.counts
+```
+
+## Discrete Points: Bar Charts
+
+```{r, echo = F}
+library(ggplot2)
+monthly.counts %>% ggplot(aes(y = num_bikes, x = month)) + geom_bar(stat = 'identity') + xlab('Month') + ylab('Bike Rentals') + labs(title = 'Bike Rentals per Month in 2011-2012 \n Capital Bikeshare in Washington, DC', caption = 'Source: www.capitalbikeshare.com')
+```
+
+
+## Exercise: Visualizing Proportions
+
+- What to look for in proportions?
+
+## Visualizing Proportions
+
+- What to look for in proportions?
+    - Generally looking for maximum, minimum, and overall distribution.
+- Many of the figures we have discussed are useful here as well: for example, stacked bar charts or points to look at changes in proportions over time.
+- Another possibility is the waffle plot we've previously seen.
+
+## Exercise: Visualizing Relationships
+
+- When considering relationships between variables, what are we looking for?
+
+## Visualizing Relationships
+
+- When considering relationships between variables, what are we looking for?
+    - If something goes up, do other variables have a positive relationship, negative relationship, or no relationship.
+    - What is the distribution of your data? (both univariate and multivariate)
+    
+
